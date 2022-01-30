@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "93769b64-d407-46b1-8089-29156ede170b",
+		"name": "CRIP Login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "System",
+			"item": [
+				{
+					"name": "wellknown",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/.well-known/openid-configuration",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								".well-known",
+								"openid-configuration"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Access",
+			"item": [
+				{
+					"name": "Get client access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function jwt_decode(token) {\r",
+									"    const parts = token.split('.');\r",
+									"    return JSON.parse(atob(parts[1]));\r",
+									"}\r",
+									"\r",
+									"pm.test('Output token data to console', () => {\r",
+									"    const access_token = pm.response.json().access_token;\r",
+									"    console.log(jwt_decode(access_token));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{cm_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{cm_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "api:identity",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/connect/token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
