@@ -16,7 +16,12 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services
+            .AddSpa()
             .AddControllers()
+            .AddCors(options =>
+            {
+                options.AddVueCors();
+            })
             .AddIdentityServer(Configuration)
             .AddAuthorization();
     }
@@ -28,6 +33,8 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseCors(SpaConfiguration.VueCorsPolicy);
+
         app.UseStaticFiles();
         app.UseAuthentication();
         app.UseRouting();
@@ -38,5 +45,8 @@ public class Startup
         {
             endpoints.MapDefaultControllerRoute();
         });
+
+        app.UseSpaStaticFiles();
+        app.UseSpa(SpaConfiguration.UseIn(Environment));
     }
 }

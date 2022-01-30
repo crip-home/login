@@ -13,7 +13,7 @@ public static class ControllerConfiguration
         services
             .AddHttpContextAccessor()
             .AddActionContextAccessor()
-            .AddControllersWithViews()
+            .AddControllers(mvc => {})
             .AddNewtonsoftJson(SetupNewtonsoftJson);
 
         return services;
